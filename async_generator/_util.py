@@ -51,9 +51,10 @@ class _AsyncGeneratorContextManager:
                 assert value is not None
                 try:
                     await self._agen.athrow(type, value, traceback)
-                    raise RuntimeError(
-                        "async generator didn't stop after athrow()"
-                    )
+                    if sys.version_info[:2] >= (3, 8) or not isinstance(value, GeneratorExit):
+                        raise RuntimeError(
+                            "async generator didn't stop after athrow()"
+                        )
                 except StopAsyncIteration as exc:
                     # Suppress StopIteration *unless* it's the same exception
                     # that was passed to throw(). This prevents a
