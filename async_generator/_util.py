@@ -51,7 +51,7 @@ class _AsyncGeneratorContextManager:
                 assert value is not None
                 try:
                     await self._agen.athrow(type, value, traceback)
-                    if sys.version_info[:2] >= (3, 8) or not isinstance(value, GeneratorExit):
+                    if sys.version_info[:3] >= (3, 7, 9) or not isinstance(value, GeneratorExit):
                         raise RuntimeError(
                             "async generator didn't stop after athrow()"
                         )
